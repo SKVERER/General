@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>Nothing interesting</title>
+</head>
+<body>
+    <h1>Never gonna give you up</h1>
+
+    <script>
+        async function logVisitorIP() {
+            try {
+                // 1. שליפת כתובת ה-IP הציבורית משירות חיצוני חינמי
+                let response = await fetch('https://api.ipify.org?format=json');
+                let data = await response.json();
+                let userIp = data.ip;
+
+                // 2. שליחת ה-IP ל-Google Apps Script Web App
+                let webAppUrl = 'https://script.google.com/macros/s/AKfycbyK_8ffMt4usb8kIJjNXVR4nFqD5xs_rAwOhLOV-jrt5Qf-EKabTl0nmXEqmFyJ6jWx/exec'; // הדביקו כאן את הכתובת שלכם
+                
+                await fetch(`${webAppUrl}?ip=${encodeURIComponent(userIp)}`, {
+                    method: 'GET',
+                    mode: 'no-cors' // נדרש כדי למנוע שגיאות CORS מול גוגל
+                });
+                
+                console.log('הנתונים נרשמו בהצלחה בקובץ');
+            } catch (error) {
+                console.error('שגיאה בשליחת הנתונים:', error);
+            }
+        }
+
+        // הפעלת הפונקציה אוטומטית ברגע שהעמוד נטען
+        window.onload = logVisitorIP;
+    </script>
+</body>
+</html>
